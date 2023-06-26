@@ -1,0 +1,80 @@
+plugins {
+    id 'application'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'org.javamodularity.moduleplugin' version '1.8.12'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'org.beryx.jlink' version '2.25.0'
+}
+
+checkstyle {
+    toolVersion = '10.10.0'
+    configFile = 'config/checkstyle/checkstyle-guide.xml' as File
+}
+
+application {
+    mainModule = 'starterCode'
+    mainClass = 'starterCode.Driver'
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+jacocoTestReport {
+    dependsOn test
+}
+
+group 'personalLibrary'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.9.2'
+}
+
+
+javafx {
+    version = '20.0.1'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+dependencies {
+    // Jackson
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+
+    // JavaFX
+    implementation('org.controlsfx:controlsfx:11.1.2')
+    implementation 'org.jetbrains:annotations:24.0.0'
+
+    // JUnit
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+
+    // TestFX
+    testImplementation 'org.testfx:testfx-core:4.0.16-alpha'
+    testImplementation 'org.testfx:testfx-junit5:4.0.16-alpha'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
+
+    // https://github.com/webcompere/system-stubs
+    testImplementation group: 'org.mockito', name: 'mockito-inline', version: '3.12.4'
+    testImplementation group: 'uk.org.webcompere', name: 'system-stubs-jupiter', version: '2.0.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jlink {
+    imageZip = project.file("${buildDir}/distributions/app-${javafx.platform.classifier}.zip")
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'app'
+    }
+}
+
+jlinkZip {
+    group = 'distribution'
+}
