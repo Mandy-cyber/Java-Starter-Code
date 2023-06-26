@@ -1,2 +1,2 @@
 # Java-Starter-Code
-Because who *actually* wants to setup their ownbuild.gradle, checkstyle, etc🤭😭
+Because who *actually* wants to setup their own build.gradle, checkstyle, etc🤭😭
