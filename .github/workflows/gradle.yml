@@ -1,0 +1,37 @@
+name: gradleCI
+
+on: 
+  push:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'corretto'
+          cache: gradle
+
+      - name: Build the project
+        run: ./gradlew build
+
+      - name: Run Tests
+        run: ./gradlew test
+
+      - name: Produce JavaDoc
+        run: ./gradlew javadoc
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Reports
+          path: build/reports/
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: JavaDocs
+          path: build/docs
